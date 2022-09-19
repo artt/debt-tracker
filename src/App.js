@@ -81,11 +81,15 @@ const facets = {
 function App() {
 
   const [data, setData] = React.useState([])
-  const [facet, setFacet] = React.useState('fiType')
+  const [facet, setFacet] = React.useState('fi')
 
   React.useEffect(() => {
     fetch(`http://localhost:1443/data/nd`, {
       method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         filters: {
           product: 0,
@@ -95,15 +99,16 @@ function App() {
           urban: 0,
           age: 0,
           covid: 0
-        }
+        },
+        facet: facet,
       })
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res)
+        // console.log(res)
         setData(res)
       })
-  }, [])
+  }, [facet])
 
   const options = {
     chart: {
@@ -133,11 +138,10 @@ function App() {
   return (
     <div className="App">
       <Box sx={{ display: 'flex' }}>
-        {/* <Drawer
+        <Drawer
           facets={facets}
-          // values={values}
           facet={facet} setFacet={setFacet}
-        /> */}
+        />
         <HighchartsReact
           highcharts={Highcharts}
           options={options}

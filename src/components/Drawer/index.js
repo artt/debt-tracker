@@ -10,7 +10,13 @@ import Divider from '@mui/material/Divider';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
-export default function Drawer({ facets, values, facet, setFacet, value, setValue, optControlled, setOptControlled }) {
+export default function Drawer({
+  facets,
+  // values,
+  facet, setFacet,
+  // value, setValue,
+  // optControlled, setOptControlled
+}) {
 
   const drawerWidth = 300
 
@@ -28,7 +34,7 @@ export default function Drawer({ facets, values, facet, setFacet, value, setValu
       anchor="left"
     >
       <List>
-        <ListItem
+        {/* <ListItem
           secondaryAction={
             <Checkbox
               edge="end"
@@ -38,9 +44,9 @@ export default function Drawer({ facets, values, facet, setFacet, value, setValu
           }
         >
           <ListItemText primary="Controlled FIs only" />
-        </ListItem>
+        </ListItem> */}
 
-        <Divider />
+        {/* <Divider />
         <ListSubheader>หน่วย</ListSubheader>
         <ListItem>
           <RadioGroup defaultValue={value}>
@@ -54,19 +60,22 @@ export default function Drawer({ facets, values, facet, setFacet, value, setValu
               />
             )}
           </RadioGroup>
-        </ListItem>
+        </ListItem> */}
 
-        <Divider />
+        {/* <Divider /> */}
         <ListSubheader>แยกประเภท</ListSubheader>
         <ListItem>
-          <RadioGroup defaultValue={facet}>
+          <RadioGroup
+            // defaultValue={facet}
+            value={facet}
+            onChange={event => setFacet(event.target.value)}
+          >
             {Object.keys(facets).map(f =>
               <FormControlLabel
                 key={f}
                 value={f}
                 control={<Radio />}
-                label={facets[f]}
-                onChange={() => setFacet(f)}
+                label={facets[f].label}
               />
             )}
           </RadioGroup>
