@@ -10,70 +10,138 @@ const facets = {
   class: {
     label: "ชั้นหนี้",
     groups: {
-      1: "SM",
-      2: "NPL",
+      1: {
+        label: "SM",
+      },
+      2: {
+        label: "NPL",
+      },
     },
   },
   product: {
     label: "ประเภทสินเชื่อ",
     groups: {
-      0: "ทุกประเภท",
-      1: "บัตรเครดิต",
-      2: "สินเชื่อไม่มีหลักประกันอื่น ๆ",
-      3: "อสังหาริมทรัพย์",
-      4: "เช่าซื้อรถ",
-      5: "สินเชื่อธุรกิจ",
-      6: "รถจักรยานยนต์",
-      7: "เพื่อการเกษตร",
-      9: "มากกว่าหนึ่งประเภท",
+      0: {
+        label: "ทุกประเภท",
+      },
+      1: {
+        label: "บัตรเครดิต",
+      },
+      2: {
+        label: "สินเชื่อไม่มีหลักประกันอื่น ๆ",
+      },
+      3: {
+        label: "อสังหาริมทรัพย์",
+      },
+      4: {
+        label: "เช่าซื้อรถ",
+      },
+      5: {
+        label: "สินเชื่อธุรกิจ",
+      },
+      6: {
+        label: "รถจักรยานยนต์",
+      },
+      7: {
+        label: "เพื่อการเกษตร",
+      },
+      9: {
+        label: "มากกว่าหนึ่งประเภท",
+      },
     },
   },
   age: {
     label: "ช่วงอายุ",
     groups: {
-      1: "20–25",
-      2: "26–35",
-      3: "36–45",
-      4: "46–60",
-      5: "61–85",
-      99: "ไม่ระบุ",
+      1: {
+        label: "20–25",
+      },
+      2: {
+        label: "26–35",
+      },
+      3: {
+        label: "36–45",
+      },
+      4: {
+        label: "46–60",
+      },
+      5: {
+        label: "61–85",
+      },
+      99: {
+        label: "ไม่ระบุ",
+      },
     },
   },
   fi: {
     label: "ประเภทสถาบันการเงิน",
     groups: {
-      0: "ทุกสถาบันการเงิน",
-      1: "ธนาคารพาณิชย์",
-      2: "Non-bank",
-      3: "SFI",
-      4: "อื่น ๆ",
-      9: "มากกว่าหนึ่งสถาบันการเงิน",
+      0: {
+        label: "ทุกสถาบันการเงิน",
+      },
+      1: {
+        label: "ธนาคารพาณิชย์",
+      },
+      2: {
+        label: "Non-bank",
+      },
+      3: {
+        label: "SFI",
+      },
+      4: {
+        label: "อื่น ๆ",
+      },
+      9: {
+        label: "มากกว่าหนึ่งสถาบันการเงิน",
+      },
     },
   },
   region: {
     label: "ภูมิภาค",
     groups: {
-      1: "กรุงเทพฯ",
-      2: "ภาคกลาง",
-      3: "ภาคเหนือ",
-      4: "ภาคตะวันออกเฉียงเหนือ",
-      5: "ภาคใต้",
-      99: "ไม่ระบุ",
+      1: {
+        label: "กรุงเทพฯ",
+      },
+      2: {
+        label: "ภาคกลาง",
+      },
+      3: {
+        label: "ภาคเหนือ",
+      },
+      4: {
+        label: "ภาคตะวันออกเฉียงเหนือ",
+      },
+      5: {
+        label: "ภาคใต้",
+      },
+      99: {
+        label: "ไม่ระบุ",
+      },
     },
   },
   urban: {
     label: "ใน/นอกเขตเมือง",
     groups: {
-      1: "นอกเขตเทศเทศบาล",
-      2: "ในเขตเทศบาล",
-      99: "ไม่ระบุ",
+      1: {
+        label: "นอกเขตเทศเทศบาล",
+      },
+      2: {
+        label: "ในเขตเทศบาล",
+      },
+      99: {
+        label: "ไม่ระบุ",
+      },
     },
   },
   covid: {
     label: "กู้ก่อน/หลังโควิด",
     groups: {
-      1: "เป็นผู้กู้ก่อนโควิด",
-      2: "เป็นผู้กู้หลังโควิด",
+      1: {
+        label: "เป็นผู้กู้ก่อนโควิด",
+      },
+      2: {
+        label: "เป็นผู้กู้หลังโควิด",
+      },
     },
   },
 }
@@ -88,7 +156,7 @@ function App() {
       method: "POST",
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         filters: {
@@ -105,8 +173,15 @@ function App() {
     })
       .then(res => res.json())
       .then(res => {
-        // console.log(res)
-        setData(res)
+        console.log("incoming data", res)
+        setData(Object.keys(res).map(x => {
+          // console.log(x)
+          // console.log(facets[facet].groups[x])
+          return ({
+            name: facets[facet].groups[x].label,
+            data: res[x],
+          })
+        }))
       })
   }, [facet])
 
@@ -115,24 +190,27 @@ function App() {
       type: 'areaspline',
     },
     title: {
-      text: 'หนี้ใหม่'
+      text: 'หนี้ที่เปลี่ยนสถานะ',
     },
     plotOptions: {
       areaspline: {
         stacking: 'normal',
+        marker: {
+          enabled: false,
+        },
       },
       series: {
         pointStart: Date.UTC(2009, 0, 1),
         pointIntervalUnit: 'month',
+        events: {
+          legendItemClick: e => e.preventDefault()
+        }
       },
     },
     xAxis: {
       type: 'datetime'
     },
-    series: Object.keys(data).map(x => ({
-      name: x,
-      data: data[x],
-    }))
+    series: data,
   };
 
   return (
