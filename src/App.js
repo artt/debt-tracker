@@ -24,7 +24,7 @@ function App() {
   const [facet, setFacet] = React.useState('fi')
 
   React.useEffect(() => {
-    fetch(`http://localhost:1443/data/nd`, {
+    fetch(`https://debt-tracker.onrender.com/data/nd`, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -122,7 +122,7 @@ function App() {
             style: {
               height: "100vh",
               width: "100%",
-              padding: "100px",
+              padding: "50px",
               boxSizing: "border-box"
             }
           }}

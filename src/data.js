@@ -61,7 +61,7 @@ export const facets = {
         label: "61–85",
       },
       99: {
-        label: "ไม่ระบุ",
+        label: "ไม่มีข้อมูล",
       },
     },
   },
@@ -107,7 +107,7 @@ export const facets = {
         label: "ภาคใต้",
       },
       99: {
-        label: "ไม่ระบุ",
+        label: "ไม่มีข้อมูล",
       },
     },
   },
@@ -121,7 +121,7 @@ export const facets = {
         label: "ในเขตเทศบาล",
       },
       99: {
-        label: "ไม่ระบุ",
+        label: "ไม่มีข้อมูล",
       },
     },
   },

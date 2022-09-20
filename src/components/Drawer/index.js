@@ -9,6 +9,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
 
 export default function Drawer({
   facets,
@@ -34,6 +36,7 @@ export default function Drawer({
       anchor="left"
     >
       <List>
+        
         {/* <ListItem
           secondaryAction={
             <Checkbox
@@ -81,6 +84,21 @@ export default function Drawer({
           </RadioGroup>
         </ListItem>
 
+        {/* <Divider />
+        <ListSubheader>Filter</ListSubheader>
+        <ListItem>
+          <TreeView>
+            <TreeItem
+              label={
+                <FormControlLabel
+                  control={
+                    <Checkbox />
+                  }
+                />
+              }
+            />
+          </TreeView>
+        </ListItem> */}
 
       </List>
     </MuiDrawer>
