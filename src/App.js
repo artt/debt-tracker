@@ -87,6 +87,23 @@ function App() {
         format: '{value:%YQ%q}',
       },
     },
+    tooltip: {
+      headerFormat: '<b>{point.x:%YQ%q}</b><br/>',
+      shadow: false,
+      shared: true,
+      useHTML: true,
+      xDateFormat: '%Y-%m-%d',
+      formatter: function() {
+        let out = `<table><caption>${Highcharts.dateFormat("%YQ%q", this.x)}</caption><tbody>`
+        this.points.forEach(point => {
+          out += `<tr><th>${point.series.name}</th>`
+          out += `<td>${point.y}</td></tr>`
+        })
+        out += `<tr><th>Total</th><td>${this.points[0].total}</td></tr>`
+        out += `</tbody></table>`
+        return out
+      }
+    },
     series: data.data,
   }
 
