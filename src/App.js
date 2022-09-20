@@ -61,6 +61,7 @@ function App() {
   const options = {
     chart: {
       type: 'areaspline', // 'streamgraph',
+      zoomType: 'x',
     },
     title: {
       text: 'หนี้ที่เปลี่ยนสถานะ',
