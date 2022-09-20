@@ -24,7 +24,9 @@ function App() {
   const [facet, setFacet] = React.useState('fi')
 
   React.useEffect(() => {
-    fetch(`https://debt-tracker.onrender.com/data/nd`, {
+    // fetch(`http://localhost:1443/data/nd`, {
+    // fetch(`https://debt-tracker.onrender.com/data/nd`, {
+    fetch(`https://pier-debt-tracker.herokuapp.com/data/nd`, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
