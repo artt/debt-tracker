@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/debt-tracker/static/css/main.073c9b0a.css",
+    "main.js": "/debt-tracker/static/js/main.c5da4728.js",
+    "static/js/787.a1ae8aa0.chunk.js": "/debt-tracker/static/js/787.a1ae8aa0.chunk.js",
+    "index.html": "/debt-tracker/index.html",
+    "main.073c9b0a.css.map": "/debt-tracker/static/css/main.073c9b0a.css.map",
+    "main.c5da4728.js.map": "/debt-tracker/static/js/main.c5da4728.js.map",
+    "787.a1ae8aa0.chunk.js.map": "/debt-tracker/static/js/787.a1ae8aa0.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.c5da4728.js"
+  ]
+}
