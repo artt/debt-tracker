@@ -24,9 +24,9 @@ function App() {
   const [facet, setFacet] = React.useState('fi')
 
   React.useEffect(() => {
-    // fetch(`http://localhost:1443/data/nd`, {
+    fetch(`http://localhost:1443/data/nd`, {
     // fetch(`https://debt-tracker.onrender.com/data/nd`, {
-    fetch(`https://pier-debt-tracker.herokuapp.com/data/nd`, {
+    // fetch(`https://pier-debt-tracker.herokuapp.com/data/nd`, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -49,7 +49,7 @@ function App() {
       .then(res => {
         console.log("incoming data", res)
         setData({
-          firstPeriod: Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3),
+          firstPeriod: Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1),
           data: Object.keys(res.data).map(x => {
             return ({
               name: facets[facet].groups[x].label,
