@@ -22,6 +22,15 @@ function App() {
 
   const [data, setData] = React.useState([])
   const [facet, setFacet] = React.useState('fi')
+  const [filters, setFilters] = React.useState({
+    product: 0,
+    fi: 0,
+    class: 0,
+    region: 0,
+    urban: 0,
+    age: 0,
+    covid: 0,
+  })
 
   React.useEffect(() => {
     fetch(`http://localhost:1443/data/nd`, {
@@ -33,15 +42,7 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        filters: {
-          product: 0,
-          fi: 0,
-          class: 0,
-          region: 0,
-          urban: 0,
-          age: 0,
-          covid: 0
-        },
+        filters: filters,
         facet: facet,
       })
     })
@@ -58,7 +59,11 @@ function App() {
           }),
         })
       })
-  }, [facet])
+  }, [facet, filters])
+
+  React.useEffect(() => {
+    console.log("set data", data)
+  }, [data])
 
   const options = {
     chart: {
@@ -116,6 +121,7 @@ function App() {
         <Drawer
           facets={facets}
           facet={facet} setFacet={setFacet}
+          filters={filters} setFilters={setFilters}
         />
         <HighchartsReact
           highcharts={Highcharts}

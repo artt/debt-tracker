@@ -9,16 +9,27 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import TreeView from '@mui/lab/TreeView';
-import TreeItem from '@mui/lab/TreeItem';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+const availableFilters = {
+  class: [...Array(3).keys()],
+  product: [...Array(8).keys(), 9],
+  fi: [...Array(5).keys(), 9],
+}
 
 export default function Drawer({
   facets,
   // values,
   facet, setFacet,
+  filters, setFilters,
   // value, setValue,
   // optControlled, setOptControlled
 }) {
+
+  console.log(availableFilters)
 
   const drawerWidth = 300
 
@@ -84,21 +95,38 @@ export default function Drawer({
           </RadioGroup>
         </ListItem>
 
-        {/* <Divider />
-        <ListSubheader>Filter</ListSubheader>
-        <ListItem>
-          <TreeView>
-            <TreeItem
-              label={
-                <FormControlLabel
-                  control={
-                    <Checkbox />
-                  }
-                />
-              }
-            />
-          </TreeView>
-        </ListItem> */}
+        <Divider />
+        <ListSubheader>Filters</ListSubheader>
+          {
+            Object.keys(availableFilters).map(filterType => {
+              return(
+                <ListItem>
+                  <FormControl fullWidth>
+                    <InputLabel>{facets[filterType].label}</InputLabel>
+                    <Select
+                      labelId={filterType}
+                      value={filters.filterType}
+                      label={facets[filterType].label}
+                      onChange={event => {
+                        setFilters({
+                          ...filters,
+                          [filterType]: event.target.value,
+                        })
+                      }}
+                    >
+                      {
+                        availableFilters[filterType].map(x => {
+                          return(
+                            <MenuItem value={x}>{facets[filterType].groups[x].label}</MenuItem>
+                          )
+                        })
+                      }
+                    </Select>
+                  </FormControl>
+                </ListItem>
+              )
+            })
+          }
 
       </List>
     </MuiDrawer>
