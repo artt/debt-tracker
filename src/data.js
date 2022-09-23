@@ -2,9 +2,6 @@ export const facets = {
   class: {
     label: "ชั้นหนี้",
     groups: {
-      0: {
-        label: "ทุกชั้น",
-      },
       1: {
         label: "SM",
       },
@@ -15,6 +12,7 @@ export const facets = {
   },
   product: {
     label: "ประเภทสินเชื่อ",
+    type: "single",
     groups: {
       0: {
         label: "ทุกประเภท",
@@ -70,6 +68,7 @@ export const facets = {
   },
   fi: {
     label: "ประเภทสถาบันการเงิน",
+    type: "single",
     groups: {
       0: {
         label: "ทุกสถาบันการเงิน",

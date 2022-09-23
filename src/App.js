@@ -20,17 +20,16 @@ Highcharts.dateFormats = {
 
 function App() {
 
+  let defaultFilters = {}
+  Object.keys(facets).forEach(facet => {
+    if (facets[facet].type === "single")
+      defaultFilters[facet] = [0]
+    else
+      defaultFilters[facet] = Object.keys(facets[facet].groups).map(x => parseInt(x))
+  })
   const [data, setData] = React.useState([])
   const [facet, setFacet] = React.useState('fi')
-  const [filters, setFilters] = React.useState({
-    product: 0,
-    fi: 0,
-    class: 0,
-    region: 0,
-    urban: 0,
-    age: 0,
-    covid: 0,
-  })
+  const [filters, setFilters] = React.useState(defaultFilters)
 
   React.useEffect(() => {
     fetch(`http://localhost:1443/data/nd`, {
@@ -60,10 +59,6 @@ function App() {
         })
       })
   }, [facet, filters])
-
-  React.useEffect(() => {
-    console.log("set data", data)
-  }, [data])
 
   const options = {
     chart: {

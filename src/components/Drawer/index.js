@@ -14,12 +14,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const availableFilters = {
-  class: [...Array(3).keys()],
-  product: [...Array(8).keys(), 9],
-  fi: [...Array(5).keys(), 9],
-}
-
 export default function Drawer({
   facets,
   // values,
@@ -28,8 +22,6 @@ export default function Drawer({
   // value, setValue,
   // optControlled, setOptControlled
 }) {
-
-  console.log(availableFilters)
 
   const drawerWidth = 300
 
@@ -98,26 +90,31 @@ export default function Drawer({
         <Divider />
         <ListSubheader>Filters</ListSubheader>
           {
-            Object.keys(availableFilters).map(filterType => {
+            Object.keys(facets).map(filterType => {
               return(
                 <ListItem>
                   <FormControl fullWidth>
                     <InputLabel>{facets[filterType].label}</InputLabel>
                     <Select
                       labelId={filterType}
-                      value={filters.filterType}
+                      value={filters[filterType]}
                       label={facets[filterType].label}
+                      multiple={facets[filterType].type !== "single"}
                       onChange={event => {
                         setFilters({
                           ...filters,
-                          [filterType]: event.target.value,
+                          [filterType]: facets[filterType].type !== "single" ? event.target.value : [event.target.value],
                         })
                       }}
                     >
                       {
-                        availableFilters[filterType].map(x => {
+                        Object.keys(facets[filterType].groups).map(x => {
                           return(
-                            <MenuItem value={x}>{facets[filterType].groups[x].label}</MenuItem>
+                            <MenuItem
+                              value={parseInt(x)}
+                            >
+                              {facets[filterType].groups[x].label}
+                            </MenuItem>
                           )
                         })
                       }
