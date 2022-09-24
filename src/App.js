@@ -63,6 +63,7 @@ function App() {
               return ({
                 name: facets[facet].groups[x].label,
                 data: res.data[x],
+                color: facets[facet].groups[x].color,
               })
             }),
           })
@@ -79,7 +80,7 @@ function App() {
       }
     },
     title: {
-      text: 'หนี้ที่เปลี่ยนสถานะ',
+      text: 'จำนวนผู้กู้ที่เปลี่ยนสถานะ',
     },
     plotOptions: {
       areaspline: {
@@ -101,6 +102,11 @@ function App() {
       type: 'datetime',
       labels: {
         format: '{value:%YQ%q}',
+      },
+    },
+    yAxis: {
+      title: {
+        text: "จำนวนผู้กู้ (ราย)"
       },
     },
     tooltip: {
