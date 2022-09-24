@@ -80,7 +80,7 @@ export default function Drawer({
               <FormControlLabel
                 key={f}
                 value={f}
-                control={<Radio />}
+                control={<Radio size="small" />}
                 label={facets[f].label}
               />
             )}
@@ -91,33 +91,39 @@ export default function Drawer({
         <ListSubheader>Filters</ListSubheader>
           {
             Object.keys(facets).map(filterType => {
+              const singleType = facets[filterType].type === "single"
               return(
                 <ListItem key={filterType}>
-                  <FormControl fullWidth>
+                  <FormControl
+                    fullWidth
+                    size="small"
+                  >
                     <InputLabel>{facets[filterType].label}</InputLabel>
                     <Select
                       labelId={filterType}
                       value={filters[filterType]}
                       label={facets[filterType].label}
-                      multiple={facets[filterType].type !== "single"}
+                      multiple={!singleType}
+                      renderValue={selected => selected.map(x => facets[filterType].groups[x].label).join(', ')}
                       onChange={event => {
                         setFilters({
                           ...filters,
-                          [filterType]: facets[filterType].type !== "single" ? event.target.value : [event.target.value],
+                          [filterType]: singleType ? [event.target.value] : event.target.value,
                           meta: filterType,
                         })
                       }}
                     >
                       {
                         Object.keys(facets[filterType].groups).map(x => {
-                          if (x === '9' && facets[filterType].type === "single")
+                          if (x === '9' && singleType)
                             return null
                           return(
                             <MenuItem
                               key={parseInt(x)}
                               value={parseInt(x)}
                             >
-                              {facets[filterType].groups[x].label}
+                              <Checkbox checked={filters[filterType].indexOf(parseInt(x)) > -1} />
+                              <ListItemText primary={facets[filterType].groups[x].label} />
                             </MenuItem>
                           )
                         })
