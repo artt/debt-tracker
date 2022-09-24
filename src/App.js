@@ -7,9 +7,9 @@ import Box from '@mui/material/Box';
 import { facets } from "./data"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-// import streamgraph from 'highcharts/modules/streamgraph'
+import streamgraph from 'highcharts/modules/streamgraph'
 
-// streamgraph(Highcharts)
+streamgraph(Highcharts)
 
 Highcharts.dateFormats = {
   q: function (timestamp) {
@@ -29,6 +29,7 @@ function App() {
     else
       defaultFilters[facet] = Object.keys(facets[facet].groups).map(x => parseInt(x))
   })
+  const [options, setOptions] = React.useState({})
   const [data, setData] = React.useState([])
   const [facet, setFacet] = React.useState('fi')
   const [filters, setFilters] = React.useState(defaultFilters)
@@ -56,13 +57,13 @@ function App() {
       })
         .then(res => res.json())
         .then(res => {
-          console.log("incoming data", res)
+          const pointStart = Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1)
           setData({
-            firstPeriod: Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1),
             data: Object.keys(res.data).map(x => {
               return ({
                 name: facets[facet].groups[x].label,
                 data: res.data[x],
+                pointStart: pointStart,
                 color: facets[facet].groups[x].color,
               })
             }),
@@ -71,63 +72,65 @@ function App() {
     }
   }, [facet, filters])
 
-  const options = {
-    chart: {
-      type: 'areaspline', // 'streamgraph',
-      zoomType: 'x',
-      style: {
-        fontFamily: 'IBM Plex Sans Thai'
-      }
-    },
-    title: {
-      text: 'จำนวนผู้กู้ที่เปลี่ยนสถานะ',
-    },
-    plotOptions: {
-      areaspline: {
-        stacking: 'normal',
-        marker: {
-          enabled: false,
-        },
-      },
-      series: {
-        pointStart: data.firstPeriod,
-        pointIntervalUnit: 'month',
-        pointInterval: 3,
-        events: {
-          legendItemClick: e => e.preventDefault()
+  React.useEffect(() => {
+    setOptions({
+      chart: {
+        type: 'streamgraph', // 'streamgraph',
+        zoomType: 'x',
+        style: {
+          fontFamily: 'IBM Plex Sans Thai'
         }
       },
-    },
-    xAxis: {
-      type: 'datetime',
-      labels: {
-        format: '{value:%YQ%q}',
-      },
-    },
-    yAxis: {
       title: {
-        text: "จำนวนผู้กู้ (ราย)"
+        text: 'จำนวนผู้กู้ที่เปลี่ยนสถานะ',
       },
-    },
-    tooltip: {
-      headerFormat: '<b>{point.x:%YQ%q}</b><br/>',
-      shadow: false,
-      shared: true,
-      useHTML: true,
-      xDateFormat: '%Y-%m-%d',
-      formatter: function() {
-        let out = `<table><caption>${Highcharts.dateFormat("%YQ%q", this.x)}</caption><tbody>`
-        this.points.forEach(point => {
-          out += `<tr><th>${point.series.name}</th>`
-          out += `<td>${point.y}</td></tr>`
-        })
-        out += `<tr><th>Total</th><td>${this.points[0].total}</td></tr>`
-        out += `</tbody></table>`
-        return out
-      }
-    },
-    series: data.data,
-  }
+      plotOptions: {
+        areaspline: {
+          stacking: 'normal',
+          marker: {
+            enabled: false,
+          },
+        },
+        series: {
+          // pointStart: data.firstPeriod,
+          pointIntervalUnit: 'month',
+          pointInterval: 3,
+          events: {
+            legendItemClick: e => e.preventDefault()
+          }
+        },
+      },
+      xAxis: {
+        type: 'datetime',
+        labels: {
+          format: '{value:%YQ%q}',
+        },
+      },
+      yAxis: {
+        title: {
+          text: "จำนวนผู้กู้ (ราย)"
+        },
+      },
+      tooltip: {
+        headerFormat: '<b>{point.x:%YQ%q}</b><br/>',
+        shadow: false,
+        shared: true,
+        useHTML: true,
+        xDateFormat: '%Y-%m-%d',
+        formatter: function() {
+          let out = `<table><caption>${Highcharts.dateFormat("%YQ%q", this.x)}</caption><tbody>`
+          this.points.forEach(point => {
+            out += `<tr><th>${point.series.name}</th>`
+            out += `<td>${point.y}</td></tr>`
+          })
+          out += `<tr><th>Total</th><td>${this.points[0].total}</td></tr>`
+          out += `</tbody></table>`
+          return out
+        }
+      },
+      series: data.data,
+    })
+  }, [data])
 
   const theme = createTheme({
     typography: {
