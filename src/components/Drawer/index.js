@@ -92,7 +92,7 @@ export default function Drawer({
           {
             Object.keys(facets).map(filterType => {
               return(
-                <ListItem>
+                <ListItem key={filterType}>
                   <FormControl fullWidth>
                     <InputLabel>{facets[filterType].label}</InputLabel>
                     <Select
@@ -104,13 +104,17 @@ export default function Drawer({
                         setFilters({
                           ...filters,
                           [filterType]: facets[filterType].type !== "single" ? event.target.value : [event.target.value],
+                          meta: filterType,
                         })
                       }}
                     >
                       {
                         Object.keys(facets[filterType].groups).map(x => {
+                          if (x === '9' && facets[filterType].type === "single")
+                            return null
                           return(
                             <MenuItem
+                              key={parseInt(x)}
                               value={parseInt(x)}
                             >
                               {facets[filterType].groups[x].label}

@@ -5,6 +5,8 @@ import HighchartsReact from 'highcharts-react-official';
 import Drawer from "./components/Drawer"
 import Box from '@mui/material/Box';
 import { facets } from "./data"
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 // import streamgraph from 'highcharts/modules/streamgraph'
 
 // streamgraph(Highcharts)
@@ -32,38 +34,49 @@ function App() {
   const [filters, setFilters] = React.useState(defaultFilters)
 
   React.useEffect(() => {
-    fetch(`http://localhost:1443/data/nd`, {
-    // fetch(`https://debt-tracker.onrender.com/data/nd`, {
-    // fetch(`https://pier-debt-tracker.herokuapp.com/data/nd`, {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        filters: filters,
-        facet: facet,
-      })
-    })
-      .then(res => res.json())
-      .then(res => {
-        console.log("incoming data", res)
-        setData({
-          firstPeriod: Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1),
-          data: Object.keys(res.data).map(x => {
-            return ({
-              name: facets[facet].groups[x].label,
-              data: res.data[x],
-            })
-          }),
+    const {meta, ...restFilters} = filters
+    // if meta = facet then no need to make another fetch
+    // TODO: need to delete filter for facet too
+    if (false) { //(meta === facet) {
+      // do nothing
+    }
+    else {
+      fetch(`http://localhost:1443/data/nd`, {
+      // fetch(`https://debt-tracker.onrender.com/data/nd`, {
+      // fetch(`https://pier-debt-tracker.herokuapp.com/data/nd`, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filters: restFilters,
+          facet: facet,
         })
       })
+        .then(res => res.json())
+        .then(res => {
+          console.log("incoming data", res)
+          setData({
+            firstPeriod: Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1),
+            data: Object.keys(res.data).map(x => {
+              return ({
+                name: facets[facet].groups[x].label,
+                data: res.data[x],
+              })
+            }),
+          })
+        })
+    }
   }, [facet, filters])
 
   const options = {
     chart: {
       type: 'areaspline', // 'streamgraph',
       zoomType: 'x',
+      style: {
+        fontFamily: 'IBM Plex Sans Thai'
+      }
     },
     title: {
       text: 'หนี้ที่เปลี่ยนสถานะ',
@@ -110,28 +123,40 @@ function App() {
     series: data.data,
   }
 
+  const theme = createTheme({
+    typography: {
+      fontFamily: `"IBM Plex Sans Thai"`,
+    },
+    palette: {
+      mode: 'light',
+    },
+  })
+
   return (
-    <div className="App">
-      <Box sx={{ display: 'flex' }}>
-        <Drawer
-          facets={facets}
-          facet={facet} setFacet={setFacet}
-          filters={filters} setFilters={setFilters}
-        />
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={options}
-          containerProps={{
-            style: {
-              height: "100vh",
-              width: "100%",
-              padding: "50px",
-              boxSizing: "border-box"
-            }
-          }}
-        />
-      </Box>
-    </div>
+    
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Box sx={{ display: 'flex' }}>
+          <Drawer
+            facets={facets}
+            facet={facet} setFacet={setFacet}
+            filters={filters} setFilters={setFilters}
+          />
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={options}
+            containerProps={{
+              style: {
+                height: "100vh",
+                width: "100%",
+                padding: "50px",
+                boxSizing: "border-box"
+              }
+            }}
+          />
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 }
 
