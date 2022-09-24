@@ -7,9 +7,9 @@ import Box from '@mui/material/Box';
 import { facets } from "./data"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import streamgraph from 'highcharts/modules/streamgraph'
+// import streamgraph from 'highcharts/modules/streamgraph'
 
-streamgraph(Highcharts)
+// streamgraph(Highcharts)
 
 Highcharts.dateFormats = {
   q: function (timestamp) {
@@ -33,6 +33,7 @@ function App() {
   const [data, setData] = React.useState([])
   const [facet, setFacet] = React.useState('fi')
   const [filters, setFilters] = React.useState(defaultFilters)
+  const [streamgraph, setStreamgraph] = React.useState(false)
 
   React.useEffect(() => {
     const {meta, ...restFilters} = filters
@@ -75,7 +76,7 @@ function App() {
   React.useEffect(() => {
     setOptions({
       chart: {
-        type: 'streamgraph', // 'streamgraph',
+        type: streamgraph ? 'streamgraph' : 'areaspline', // 'streamgraph',
         zoomType: 'x',
         style: {
           fontFamily: 'IBM Plex Sans Thai'
@@ -130,7 +131,7 @@ function App() {
       },
       series: data.data,
     })
-  }, [data])
+  }, [data, streamgraph])
 
   const theme = createTheme({
     typography: {
@@ -150,6 +151,7 @@ function App() {
             facets={facets}
             facet={facet} setFacet={setFacet}
             filters={filters} setFilters={setFilters}
+            streamgraph={streamgraph} setStreamgraph={setStreamgraph}
           />
           <HighchartsReact
             highcharts={Highcharts}

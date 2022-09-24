@@ -21,6 +21,7 @@ export default function Drawer({
   filters, setFilters,
   // value, setValue,
   // optControlled, setOptControlled
+  streamgraph, setStreamgraph,
 }) {
 
   const drawerWidth = 300
@@ -89,51 +90,67 @@ export default function Drawer({
 
         <Divider />
         <ListSubheader>Filters</ListSubheader>
-          {
-            Object.keys(facets).map(filterType => {
-              const singleType = facets[filterType].type === "single"
-              return(
-                <ListItem key={filterType}>
-                  <FormControl
-                    fullWidth
-                    size="small"
+        {
+          Object.keys(facets).map(filterType => {
+            const singleType = facets[filterType].type === "single"
+            return(
+              <ListItem key={filterType}>
+                <FormControl
+                  fullWidth
+                  size="small"
+                >
+                  <InputLabel>{facets[filterType].label}</InputLabel>
+                  <Select
+                    labelId={filterType}
+                    value={filters[filterType]}
+                    label={facets[filterType].label}
+                    multiple={!singleType}
+                    renderValue={selected => selected.map(x => facets[filterType].groups[x].label).join(', ')}
+                    onChange={event => {
+                      setFilters({
+                        ...filters,
+                        [filterType]: singleType ? [event.target.value] : event.target.value,
+                        meta: filterType,
+                      })
+                    }}
                   >
-                    <InputLabel>{facets[filterType].label}</InputLabel>
-                    <Select
-                      labelId={filterType}
-                      value={filters[filterType]}
-                      label={facets[filterType].label}
-                      multiple={!singleType}
-                      renderValue={selected => selected.map(x => facets[filterType].groups[x].label).join(', ')}
-                      onChange={event => {
-                        setFilters({
-                          ...filters,
-                          [filterType]: singleType ? [event.target.value] : event.target.value,
-                          meta: filterType,
-                        })
-                      }}
-                    >
-                      {
-                        Object.keys(facets[filterType].groups).map(x => {
-                          if (x === '9' && singleType)
-                            return null
-                          return(
-                            <MenuItem
-                              key={parseInt(x)}
-                              value={parseInt(x)}
-                            >
-                              <Checkbox checked={filters[filterType].indexOf(parseInt(x)) > -1} />
-                              <ListItemText primary={facets[filterType].groups[x].label} />
-                            </MenuItem>
-                          )
-                        })
-                      }
-                    </Select>
-                  </FormControl>
-                </ListItem>
-              )
-            })
+                    {
+                      Object.keys(facets[filterType].groups).map(x => {
+                        if (x === '9' && singleType)
+                          return null
+                        return(
+                          <MenuItem
+                            key={parseInt(x)}
+                            value={parseInt(x)}
+                          >
+                            {!singleType &&
+                              <Checkbox
+                                checked={filters[filterType].indexOf(parseInt(x)) > -1}
+                                size="small"
+                              />
+                            }
+                            <ListItemText primary={facets[filterType].groups[x].label} />
+                          </MenuItem>
+                        )
+                      })
+                    }
+                  </Select>
+                </FormControl>
+              </ListItem>
+            )
+          })
+        }
+
+        {/* <Divider />
+        <FormControlLabel
+          control={
+            <Checkbox
+              size="small"
+              onChange={event => setStreamgraph(event.target.checked)}
+            />
           }
+          label="Streamgraph"
+        /> */}
 
       </List>
     </MuiDrawer>

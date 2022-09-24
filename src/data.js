@@ -141,14 +141,14 @@ export const facets = {
     },
   },
   urban: {
-    label: "ใน/นอกเขตเมือง",
+    label: "ใน/นอกเขตเทศบาล",
     groups: {
       1: {
-        label: "นอกเขตเทศเทศบาล",
+        label: "นอกเขต",
         color: "#4dd245",
       },
       2: {
-        label: "ในเขตเทศบาล",
+        label: "ในเขต",
         color: "#A06c5a",
       },
       99: {
@@ -158,14 +158,14 @@ export const facets = {
     },
   },
   covid: {
-    label: "กู้ก่อน/หลังโควิด",
+    label: "ช่วงที่กู้ครั้งแรก",
     groups: {
       1: {
-        label: "เป็นผู้กู้ก่อนโควิด",
+        label: "ก่อนโควิด",
         color: "#5a87a0",
       },
       2: {
-        label: "เป็นผู้กู้หลังโควิด",
+        label: "หลังโควิด",
         color: "#Ffd949",
       },
     },
