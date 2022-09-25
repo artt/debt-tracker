@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/debt-tracker/static/css/main.54e3022d.css",
-    "main.js": "/debt-tracker/static/js/main.036d3465.js",
+    "main.js": "/debt-tracker/static/js/main.c3f00eaa.js",
     "static/js/787.a1ae8aa0.chunk.js": "/debt-tracker/static/js/787.a1ae8aa0.chunk.js",
     "index.html": "/debt-tracker/index.html",
     "main.54e3022d.css.map": "/debt-tracker/static/css/main.54e3022d.css.map",
-    "main.036d3465.js.map": "/debt-tracker/static/js/main.036d3465.js.map",
+    "main.c3f00eaa.js.map": "/debt-tracker/static/js/main.c3f00eaa.js.map",
     "787.a1ae8aa0.chunk.js.map": "/debt-tracker/static/js/787.a1ae8aa0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.54e3022d.css",
-    "static/js/main.036d3465.js"
+    "static/js/main.c3f00eaa.js"
   ]
 }
