@@ -35,6 +35,8 @@ function App() {
   const [filters, setFilters] = React.useState(defaultFilters)
   const [streamgraph, setStreamgraph] = React.useState(false)
 
+  const serverAddress = process.env.NODE_ENV === "development" ? `http://localhost:1443` : `https://pier-debt-tracker.herokuapp.com`
+
   React.useEffect(() => {
     const {meta, ...restFilters} = filters
     // if meta = facet then no need to make another fetch
@@ -43,9 +45,7 @@ function App() {
       // do nothing
     }
     else {
-      fetch(`http://localhost:1443/data/nd`, {
-      // fetch(`https://debt-tracker.onrender.com/data/nd`, {
-      // fetch(`https://pier-debt-tracker.herokuapp.com/data/nd`, {
+      fetch(`${serverAddress}/data/nd`, {
         method: "POST",
         headers: {
           'Accept': 'application/json',
