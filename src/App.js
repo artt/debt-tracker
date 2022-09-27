@@ -6,6 +6,7 @@ import Drawer from "./components/Drawer"
 import Box from '@mui/material/Box';
 import { facets } from "./data"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // import streamgraph from 'highcharts/modules/streamgraph'
 
@@ -59,8 +60,8 @@ function App() {
         .then(res => res.json())
         .then(res => {
           const pointStart = Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1)
-          setData({
-            data: Object.keys(res.data).map(x => {
+          setData(
+            Object.keys(res.data).map(x => {
               return ({
                 name: facets[facet].groups[x].label,
                 data: res.data[x],
@@ -68,12 +69,13 @@ function App() {
                 color: facets[facet].groups[x].color,
               })
             }),
-          })
+          )
         })
     }
-  }, [facet, filters])
+  }, [facet, filters, serverAddress])
 
   React.useEffect(() => {
+    console.log(data)
     setOptions({
       chart: {
         type: streamgraph ? 'streamgraph' : 'areaspline', // 'streamgraph',
@@ -129,7 +131,7 @@ function App() {
           return out
         }
       },
-      series: data.data,
+      series: data,
     })
   }, [data, streamgraph])
 
@@ -153,18 +155,31 @@ function App() {
             filters={filters} setFilters={setFilters}
             streamgraph={streamgraph} setStreamgraph={setStreamgraph}
           />
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={options}
-            containerProps={{
-              style: {
-                height: "100vh",
-                width: "100%",
-                padding: "50px",
-                boxSizing: "border-box"
-              }
-            }}
-          />
+          {data.length === 0 &&
+            <Box sx={{
+              display: 'flex',
+              width: '100%',
+              height: '100vh',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+              <CircularProgress />
+            </Box>
+          }
+          {data.length > 0 &&
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={options}
+              containerProps={{
+                style: {
+                  height: "100vh",
+                  width: "100%",
+                  padding: "50px",
+                  boxSizing: "border-box"
+                }
+              }}
+            />
+          }
         </Box>
       </div>
     </ThemeProvider>
