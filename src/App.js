@@ -67,8 +67,9 @@ function App() {
                 data: res.data[x],
                 pointStart: pointStart,
                 color: facets[facet].groups[x].color,
+                order: facets[facet].groups[x].order,
               })
-            }),
+            }).sort((a, b) => (a.order || 0) - (b.order || 0)),
           )
         })
     }

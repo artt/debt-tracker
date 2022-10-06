@@ -9,34 +9,42 @@ export const facets = {
       1: {
         label: "บัตรเครดิต",
         color: "#5652a2",
+        order: 6,
       },
       2: {
         label: "สินเชื่อไม่มีหลักประกันอื่น ๆ",
         color: "#7d79d2",
+        order: 7,
       },
       3: {
         label: "อสังหาริมทรัพย์",
         color: "#2fa035",
+        order: 3,
       },
       4: {
         label: "เช่าซื้อรถ",
         color: "#Ee6c34",
+        order: 4,
       },
       5: {
         label: "สินเชื่อธุรกิจ",
         color: "#3db7c7",
+        order: 2,
       },
       6: {
         label: "รถจักรยานยนต์",
         color: "#Ffcc00",
+        order: 5,
       },
       7: {
         label: "เพื่อการเกษตร",
         color: "#9bd64a",
+        order: 1,
       },
       9: {
         label: "มากกว่าหนึ่งประเภท",
         color: "#9e9e9e",
+        order: 8,
       },
     },
   },
@@ -50,22 +58,27 @@ export const facets = {
       1: {
         label: "ธนาคารพาณิชย์",
         color: "#1723b3",
+        order: 3,
       },
       2: {
         label: "Non-bank",
         color: "#D28822",
+        order: 2,
       },
       3: {
         label: "SFI",
         color: "#58c54c",
+        order: 1,
       },
       4: {
         label: "อื่น ๆ",
         color: "#686c9c",
+        order: 4,
       },
       9: {
         label: "มากกว่าหนึ่งสถาบันการเงิน",
         color: "#9e9e9e",
+        order: 5,
       },
     },
   },
