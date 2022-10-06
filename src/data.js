@@ -83,14 +83,14 @@ export const facets = {
     },
   },
   class: {
-    label: "ชั้นหนี้",
+    label: "สถานะค้างชำระ",
     groups: {
       1: {
-        label: "SM",
+        label: "ค้างชำระ 30–90 วัน",
         color: "#eab676"
       },
       2: {
-        label: "NPL",
+        label: "ค้างชำระเกิน 90 วัน",
         color: "#B91964"
       },
     },
