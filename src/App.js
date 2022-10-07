@@ -31,7 +31,7 @@ function App() {
       defaultFilters[facet] = Object.keys(facets[facet].groups).map(x => parseInt(x))
   })
   const [options, setOptions] = React.useState({})
-  const [data, setData] = React.useState([])
+  const [res, setRes] = React.useState({})
   const [facet, setFacet] = React.useState('fi')
   const [filters, setFilters] = React.useState(defaultFilters)
   const [percent, setPercent] = React.useState(true)
@@ -59,24 +59,15 @@ function App() {
         })
       })
         .then(res => res.json())
-        .then(res => {
-          const pointStart = Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1)
-          setData(
-            Object.keys(res.data).map(x => {
-              return ({
-                name: facets[facet].groups[x].label,
-                data: res.data[x].map((xx, i) => xx / totalBorrowers[i]),
-                pointStart: pointStart,
-                color: facets[facet].groups[x].color,
-                order: facets[facet].groups[x].order,
-              })
-            }).sort((a, b) => (a.order || 0) - (b.order || 0)),
-          )
-        })
+        .then(res => setRes(res))
     }
   }, [facet, filters, serverAddress])
 
   React.useEffect(() => {
+    console.log(res)
+    if (Object.keys(res).length === 0)
+      return
+    const pointStart = Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1)
     setOptions({
       chart: {
         type: streamgraph ? 'streamgraph' : 'areaspline', // 'streamgraph',
@@ -102,7 +93,6 @@ function App() {
           },
         },
         series: {
-          // pointStart: data.firstPeriod,
           pointIntervalUnit: 'month',
           pointInterval: 3,
           events: {
@@ -138,9 +128,17 @@ function App() {
           return out
         }
       },
-      series: data,
+      series: Object.keys(res.data).map(x => {
+        return ({
+          name: facets[res.facet].groups[x].label,
+          data: res.data[x].map((xx, i) => xx / totalBorrowers[i]),
+          pointStart: pointStart,
+          color: facets[res.facet].groups[x].color,
+          order: facets[res.facet].groups[x].order,
+        })
+      }).sort((a, b) => (a.order || 0) - (b.order || 0)),
     })
-  }, [data, streamgraph])
+  }, [res, streamgraph])
 
   const theme = createTheme({
     typography: {
@@ -150,6 +148,8 @@ function App() {
       mode: 'light',
     },
   })
+
+  const dataReady = Object.keys(res).length > 0
 
   return (
     
@@ -163,7 +163,7 @@ function App() {
             streamgraph={streamgraph} setStreamgraph={setStreamgraph}
             percent={percent} setPercent={setPercent}
           />
-          {data.length === 0 &&
+          {!dataReady &&
             <Box sx={{
               display: 'flex',
               width: '100%',
@@ -174,7 +174,7 @@ function App() {
               <CircularProgress />
             </Box>
           }
-          {data.length > 0 &&
+          {dataReady &&
             <HighchartsReact
               highcharts={Highcharts}
               options={options}
