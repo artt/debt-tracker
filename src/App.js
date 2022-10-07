@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Drawer from "./components/Drawer"
 import Box from '@mui/material/Box';
-import { facets, totalBorrowers } from "./data"
+import { facets, totalBorrowers, measures } from "./data"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -43,6 +43,7 @@ function App() {
   const [facet, setFacet] = React.useState('fi')
   const [filters, setFilters] = React.useState(defaultFilters)
   const [percent, setPercent] = React.useState(true)
+  const [annotations, setAnnotations] = React.useState(true)
   const [streamgraph, setStreamgraph] = React.useState(false)
 
   const serverAddress = process.env.NODE_ENV === "development"
@@ -116,6 +117,22 @@ function App() {
         labels: {
           format: '{value:%YQ%q}',
         },
+        plotBands: annotations && measures.filter(m => 'from' in m).map(m => ({
+          color: 'lightgrey',
+          from: Date.parse(m.from),
+          to: Date.parse(m.to),
+          label: {
+            text: m.title,
+          },
+        })),
+        plotLines: annotations && measures.filter(m => 'value' in m).map(m => ({
+          color: 'lightgrey',
+          value: Date.parse(m.value),
+          width: 2,
+          label: {
+            text: m.title,
+          },
+        })),
       },
       yAxis: {
         title: {
@@ -132,7 +149,6 @@ function App() {
         xDateFormat: '%Y-%m-%d',
         formatter: function() {
           let out = `<table class="tooltip-table"><caption>${Highcharts.dateFormat("%YQ%q", this.x)}</caption><tbody>`
-          console.log(this.points[0])
           this.points.forEach(point => {
             out += `<tr><th>${point.series.name}</th>`
             out += `<td class="align-right">${formatNumber(point.y, percent)}</td>`
@@ -162,7 +178,7 @@ function App() {
         })
       }).sort((a, b) => (a.order || 0) - (b.order || 0)),
     })
-  }, [res, percent, streamgraph])
+  }, [res, percent, annotations, streamgraph])
 
   const theme = createTheme({
     typography: {
@@ -184,6 +200,7 @@ function App() {
             filters={filters} setFilters={setFilters}
             streamgraph={streamgraph} setStreamgraph={setStreamgraph}
             percent={percent} setPercent={setPercent}
+            annotations={annotations} setAnnotations={setAnnotations}
           />
           {!dataReady &&
             <Box sx={{

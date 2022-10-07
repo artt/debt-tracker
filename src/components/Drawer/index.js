@@ -23,6 +23,7 @@ export default function Drawer({
   // value, setValue,
   // optControlled, setOptControlled
   percent, setPercent,
+  annotations, setAnnotations,
   streamgraph, setStreamgraph,
 }) {
 
@@ -155,20 +156,27 @@ export default function Drawer({
         /> */}
         <ListItem>
           <FormControl fullWidth>
-          <FormControlLabel
-            control={<Switch
-              checked={percent}
-              onChange={e => setPercent(e.target.checked)}
-            />}
-            label="แสดงสัดส่วนจากผู้กู้ทั้งหมด"
-          />
-          {/* <FormControlLabel
-            control={<Switch
-              checked={streamgraph}
-              onChange={e => setStreamgraph(e.target.checked)}
-            />}
-            label="Streamgraph"
-          /> */}
+            <FormControlLabel
+              control={<Switch
+                checked={percent}
+                onChange={e => setPercent(e.target.checked)}
+              />}
+              label="แสดงสัดส่วนจากผู้กู้ทั้งหมด"
+            />
+            <FormControlLabel
+              control={<Switch
+                checked={annotations}
+                onChange={e => setAnnotations(e.target.checked)}
+              />}
+              label="แสดงมาตรการรัฐ"
+            />
+            {/* <FormControlLabel
+              control={<Switch
+                checked={streamgraph}
+                onChange={e => setStreamgraph(e.target.checked)}
+              />}
+              label="Streamgraph"
+            /> */}
           </FormControl>
         </ListItem>
 
