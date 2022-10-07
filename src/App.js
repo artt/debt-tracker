@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Drawer from "./components/Drawer"
 import Box from '@mui/material/Box';
-import { facets } from "./data"
+import { facets, totalBorrowers } from "./data"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -34,6 +34,7 @@ function App() {
   const [data, setData] = React.useState([])
   const [facet, setFacet] = React.useState('fi')
   const [filters, setFilters] = React.useState(defaultFilters)
+  const [percent, setPercent] = React.useState(true)
   const [streamgraph, setStreamgraph] = React.useState(false)
 
   const serverAddress = process.env.NODE_ENV === "development" ? `http://localhost:1443` : `https://pier-debt-tracker.herokuapp.com`
@@ -64,7 +65,7 @@ function App() {
             Object.keys(res.data).map(x => {
               return ({
                 name: facets[facet].groups[x].label,
-                data: res.data[x],
+                data: res.data[x].map((xx, i) => xx / totalBorrowers[i]),
                 pointStart: pointStart,
                 color: facets[facet].groups[x].color,
                 order: facets[facet].groups[x].order,
@@ -76,7 +77,6 @@ function App() {
   }, [facet, filters, serverAddress])
 
   React.useEffect(() => {
-    console.log(data)
     setOptions({
       chart: {
         type: streamgraph ? 'streamgraph' : 'areaspline', // 'streamgraph',
@@ -90,6 +90,9 @@ function App() {
       },
       title: {
         text: 'ผู้กู้ที่เริ่มมีปัญหาค้างชำระหนี้',
+      },
+      credits: {
+        enabled: false
       },
       plotOptions: {
         areaspline: {
@@ -158,6 +161,7 @@ function App() {
             facet={facet} setFacet={setFacet}
             filters={filters} setFilters={setFilters}
             streamgraph={streamgraph} setStreamgraph={setStreamgraph}
+            percent={percent} setPercent={setPercent}
           />
           {data.length === 0 &&
             <Box sx={{

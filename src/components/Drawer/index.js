@@ -13,6 +13,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Switch from '@mui/material/Switch';
 
 export default function Drawer({
   facets,
@@ -21,6 +22,7 @@ export default function Drawer({
   filters, setFilters,
   // value, setValue,
   // optControlled, setOptControlled
+  percent, setPercent,
   streamgraph, setStreamgraph,
 }) {
 
@@ -70,7 +72,7 @@ export default function Drawer({
         </ListItem> */}
 
         {/* <Divider /> */}
-        <ListSubheader>แยกประเภท</ListSubheader>
+        <ListSubheader>แยกประเภทตาม</ListSubheader>
         <ListItem>
           <RadioGroup
             // defaultValue={facet}
@@ -141,8 +143,8 @@ export default function Drawer({
           })
         }
 
-        {/* <Divider />
-        <FormControlLabel
+        <Divider />
+        {/* <FormControlLabel
           control={
             <Checkbox
               size="small"
@@ -151,6 +153,18 @@ export default function Drawer({
           }
           label="Streamgraph"
         /> */}
+        <ListItem>
+          <FormControl fullWidth>
+            <FormControlLabel
+              value="start"
+              control={<Switch
+                checked={percent}
+                onChange={e => setPercent(e.target.checked)}
+              />}
+              label="แสดงสัดส่วนจากผู้กู้ทั้งหมด"
+            />
+          </FormControl>
+        </ListItem>
 
       </List>
     </MuiDrawer>
