@@ -1,5 +1,5 @@
 import React from "react"
-import './App.css';
+import './App.scss';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Drawer from "./components/Drawer"
@@ -9,7 +9,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
 
 // import streamgraph from 'highcharts/modules/streamgraph'
-
 // streamgraph(Highcharts)
 
 Highcharts.dateFormats = {
@@ -19,7 +18,14 @@ Highcharts.dateFormats = {
     // console.log(quarter);
     return quarter;
   }
-};
+}
+
+function formatNumber(num, percent) {
+  if (percent) {
+    return num.toFixed(2) + '%'
+  }
+  return num.toLocaleString() + ' คน'
+}
 
 function App() {
 
@@ -30,14 +36,18 @@ function App() {
     else
       defaultFilters[facet] = Object.keys(facets[facet].groups).map(x => parseInt(x))
   })
+
   const [options, setOptions] = React.useState({})
   const [res, setRes] = React.useState({})
+  const [dataReady, setDataReady] = React.useState(false)
   const [facet, setFacet] = React.useState('fi')
   const [filters, setFilters] = React.useState(defaultFilters)
   const [percent, setPercent] = React.useState(true)
   const [streamgraph, setStreamgraph] = React.useState(false)
 
-  const serverAddress = process.env.NODE_ENV === "development" ? `http://localhost:1443` : `https://pier-debt-tracker.herokuapp.com`
+  const serverAddress = process.env.NODE_ENV === "development"
+    ? `http://localhost:1443`
+    : `https://pier-debt-tracker.herokuapp.com`
 
   React.useEffect(() => {
     const {meta, ...restFilters} = filters
@@ -47,6 +57,7 @@ function App() {
       // do nothing
     }
     else {
+      // setDataReady(false)
       fetch(`${serverAddress}/data/nd`, {
         method: "POST",
         headers: {
@@ -64,10 +75,10 @@ function App() {
   }, [facet, filters, serverAddress])
 
   React.useEffect(() => {
-    console.log(res)
     if (Object.keys(res).length === 0)
       return
-    const pointStart = Date.UTC(parseInt(res.first_period.slice(0, 4)), parseInt(res.first_period.slice(5)) * 3 - 1)
+    setDataReady(true)
+    const pointStart = Date.UTC(parseInt(res.first_period.slice(0, 4)), (parseInt(res.first_period.slice(5)) - 1) * 3)
     setOptions({
       chart: {
         type: streamgraph ? 'streamgraph' : 'areaspline', // 'streamgraph',
@@ -108,7 +119,9 @@ function App() {
       },
       yAxis: {
         title: {
-          text: "จำนวนผู้กู้ (ราย)"
+          text: percent
+            ? "สัดส่วนผู้กู้ (ร้อยละ)"
+            : "จำนวนผู้กู้ (ราย)"
         },
       },
       tooltip: {
@@ -118,27 +131,38 @@ function App() {
         useHTML: true,
         xDateFormat: '%Y-%m-%d',
         formatter: function() {
-          let out = `<table><caption>${Highcharts.dateFormat("%YQ%q", this.x)}</caption><tbody>`
+          let out = `<table class="tooltip-table"><caption>${Highcharts.dateFormat("%YQ%q", this.x)}</caption><tbody>`
+          console.log(this.points[0])
           this.points.forEach(point => {
             out += `<tr><th>${point.series.name}</th>`
-            out += `<td>${point.y}</td></tr>`
+            out += `<td class="align-right">${formatNumber(point.y, percent)}</td>`
+            out += `<td class="align-right">${formatNumber(point.point.altY, !percent)}</td>`
+            out += `</tr>`
           })
-          out += `<tr><th>Total</th><td>${this.points[0].total}</td></tr>`
-          out += `</tbody></table>`
+          out += `<tr><th>Total</th>`
+          out += `<td class="align-right">${formatNumber(this.points[0].total, percent)}</td>`
+          out += `<td class="align-right">${formatNumber(this.points.map(p => p.point.altY).reduce((a, b) => a + b, 0), !percent)}</td>`
+          out += `</tr></tbody></table>`
           return out
         }
       },
       series: Object.keys(res.data).map(x => {
         return ({
           name: facets[res.facet].groups[x].label,
-          data: res.data[x].map((xx, i) => xx / totalBorrowers[i]),
+          data: res.data[x].map((xx, i) => {
+            const pct = xx / totalBorrowers[i] * 100
+            return({
+              y: percent ? pct : xx,
+              altY: !percent ? pct : xx,
+            })
+          }),
           pointStart: pointStart,
           color: facets[res.facet].groups[x].color,
           order: facets[res.facet].groups[x].order,
         })
       }).sort((a, b) => (a.order || 0) - (b.order || 0)),
     })
-  }, [res, streamgraph])
+  }, [res, percent, streamgraph])
 
   const theme = createTheme({
     typography: {
@@ -148,8 +172,6 @@ function App() {
       mode: 'light',
     },
   })
-
-  const dataReady = Object.keys(res).length > 0
 
   return (
     
@@ -183,7 +205,7 @@ function App() {
                   height: "100vh",
                   width: "100%",
                   padding: "50px",
-                  boxSizing: "border-box"
+                  boxSizing: "border-box",
                 }
               }}
             />

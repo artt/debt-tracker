@@ -155,14 +155,20 @@ export default function Drawer({
         /> */}
         <ListItem>
           <FormControl fullWidth>
-            <FormControlLabel
-              value="start"
-              control={<Switch
-                checked={percent}
-                onChange={e => setPercent(e.target.checked)}
-              />}
-              label="แสดงสัดส่วนจากผู้กู้ทั้งหมด"
-            />
+          <FormControlLabel
+            control={<Switch
+              checked={percent}
+              onChange={e => setPercent(e.target.checked)}
+            />}
+            label="แสดงสัดส่วนจากผู้กู้ทั้งหมด"
+          />
+          {/* <FormControlLabel
+            control={<Switch
+              checked={streamgraph}
+              onChange={e => setStreamgraph(e.target.checked)}
+            />}
+            label="Streamgraph"
+          /> */}
           </FormControl>
         </ListItem>
 
