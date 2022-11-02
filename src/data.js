@@ -182,10 +182,12 @@ export const facets = {
       1: {
         label: "ก่อนโควิด",
         color: "#5a87a0",
+        order: 2,
       },
       2: {
         label: "หลังโควิด",
         color: "#Ffd949",
+        order: 1,
       },
     },
   },
