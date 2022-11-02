@@ -87,11 +87,13 @@ export const facets = {
     groups: {
       1: {
         label: "ค้างชำระ 30–90 วัน",
-        color: "#eab676"
+        color: "#eab676",
+        order: 2,
       },
       2: {
         label: "ค้างชำระเกิน 90 วัน",
-        color: "#B91964"
+        color: "#B91964",
+        order: 1,
       },
     },
   },
