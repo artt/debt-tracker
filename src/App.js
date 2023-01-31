@@ -48,7 +48,9 @@ function App() {
 
   const serverAddress = process.env.NODE_ENV === "development"
     ? `http://localhost:1443`
-    : `https://pier-debt-tracker.herokuapp.com`
+    : `https://debt-tracker.api.artt.dev`
+
+
 
   React.useEffect(() => {
     const {meta, ...restFilters} = filters
